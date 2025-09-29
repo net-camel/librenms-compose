@@ -37,10 +37,10 @@ services:
     cap_add:
       - NET_ADMIN
       - NET_RAW
-    ports:
-      - target: 8000
-        published: 8000
-        protocol: tcp
+    # ports:
+    #   - target: 8000
+    #     published: 8000
+    #     protocol: tcp
     depends_on:
       - db
       - redis
