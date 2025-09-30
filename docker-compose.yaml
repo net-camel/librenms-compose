@@ -37,18 +37,12 @@ services:
     cap_add:
       - NET_ADMIN
       - NET_RAW
-    # ports:
-    #   - target: 8000
-    #     published: 8000
-    #     protocol: tcp
     depends_on:
       - db
       - redis
     volumes:
       - "./librenms:/data"
     environment:
-      - "LIBRENMS_BASE_URL=https://librenms.localhost"
-      - "SESSION_SECURE_COOKIE=true"
       - "TZ=${TZ}"
       - "PUID=${PUID}"
       - "PGID=${PGID}"
@@ -57,12 +51,15 @@ services:
       - "DB_USER=${MYSQL_USER}"
       - "DB_PASSWORD=${MYSQL_PASSWORD}"
       - "DB_TIMEOUT=60"
+      - "LIBRENMS_BASE_URL=https://librenms.localhost"
+      - "SESSION_SECURE_COOKIE=true"
     restart: unless-stopped
     labels:
       - traefik.enable=true
       - traefik.http.routers.librenms.rule=Host(`librenms.localhost`)
       - traefik.http.routers.librenms.entrypoints=websecure
       - traefik.http.routers.librenms.tls=true
+      - traefik.http.services.librenms-lb.loadbalancer.server.port=8000
     networks:
       - frontend
 
